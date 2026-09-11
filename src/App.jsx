@@ -2,6 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react'
 import baseAliens from './data/aliens'
 import supabase from './supabaseClient'
 import NavBar from './components/NavBar'
+import ErrorBoundary from './components/ErrorBoundary'
 import ProfileCard from './components/ProfileCard'
 import Filters from './components/Filters'
 import CreateAlien from './components/CreateAlien'
@@ -43,6 +44,7 @@ export default function App(){
   }, [created])
 
   const [editing, setEditing] = useState(null)
+  const [createKey, setCreateKey] = useState(0)
   const defaultSupreme = { id:'supreme', name:'Supreme Leader', species:'Omniarch', planet:'Sol Nexus', age: '??', occupation:'Ruler of Everything', height:'variable', imageUrl:'', appendages:'none', atmosphere:'oxygen', transportation:'teleport', travelSpeed:'instant', language:'All Tongues', biography:'I administer cosmic bureaucracy and occasional benevolent chaos.', greenFlags:'Generous tax forgiveness', redFlags:'Extremely opinionated', partnerPreferences:'Must be loyal', eyes:2, lifespan:10000, diet:'stars' }
   const [supreme, setSupreme] = useLocalStorage('am_supreme', defaultSupreme)
 
@@ -163,6 +165,18 @@ export default function App(){
 
   const [filters, setFilters] = useState({species:'',appendages:'',atmosphere:'',diet:'',eyes:'',transportation:'',lifespan:''})
 
+  function openCreateNew(){
+    setEditing(null)
+    setCreateKey(k => k + 1)
+    setView('CREATE ALIEN')
+  }
+
+  useEffect(()=>{
+    if(view === 'CREATE ALIEN' && editing === null){
+      setCreateKey(k => k + 1)
+    }
+  }, [view, editing])
+
   function resetFilters(){ setFilters({species:'',appendages:'',atmosphere:'',diet:'',eyes:'',transportation:'',lifespan:''}) }
 
   const speciesOptions = Array.from(new Set(allAliens.map(a=>a.species))).filter(Boolean)
@@ -198,68 +212,139 @@ export default function App(){
   },[zeroG])
 
   return (
-    <div className={`app ${zeroG ? 'zero-g-mode' : ''}`}>
-      <NavBar view={view} setView={setView} zeroG={zeroG} setZeroG={setZeroG} clearEditing={()=> setEditing(null)} />
-      <div className={`container ${view==='PROFILES' ? 'with-left':'full'}`}>
-        {view==='PROFILES' && (
-          <aside className="left">
-            <Filters filters={filters} setFilters={setFilters} reset={resetFilters} speciesOptions={speciesOptions} appendOptions={appendOptions} atmosphereOptions={atmosphereOptions} dietOptions={dietOptions} transportOptions={transportOptions} />
-          </aside>
-        )}
-        <main className="main">
-          {view==='YOUR PROFILE' && (
-            <div className="main-profile">
-              <ProfileCard alien={supreme} onAbduct={()=>{}} zeroG={zeroG} favorites={favorites} onToggleFavorite={toggleFavorite} isAbducted={abducted.includes(supreme.id)} onToggleAbduct={toggleAbduct} onEdit={(al)=>{ setEditing(al); setView('CREATE ALIEN') }} />
-            </div>
-          )}
-          {view==='PROFILES' && (
-            <div>
-              {filtered.length===0 && <div className="none">No profiles available.</div>}
-              <div className="grid">
-                {filtered.map(a=> (
-                  <ProfileCard key={a.id} alien={a} onAbduct={onAbduct} zeroG={zeroG} favorites={favorites} onToggleFavorite={toggleFavorite} isAbducted={abducted.includes(a.id)} onToggleAbduct={toggleAbduct} onEdit={(al)=>{ setEditing(al); setView('CREATE ALIEN') }} onDelete={onDelete} />
-                ))}
-              </div>
-            </div>
+    <ErrorBoundary>
+      <div className={`app ${zeroG ? 'zero-g-mode' : ''}`}>
+        <NavBar view={view} setView={setView} zeroG={zeroG} setZeroG={setZeroG} onCreateNew={openCreateNew} />
+
+        <div className={`container ${view === 'PROFILES' ? 'with-left' : 'full'}`}>
+          {view === 'PROFILES' && (
+            <aside className="left">
+              <Filters
+                filters={filters}
+                setFilters={setFilters}
+                reset={resetFilters}
+                speciesOptions={speciesOptions}
+                appendOptions={appendOptions}
+                atmosphereOptions={atmosphereOptions}
+                dietOptions={dietOptions}
+                transportOptions={transportOptions}
+              />
+            </aside>
           )}
 
-          {view==='REJECTED' && (
+          <main className="main">
+            {view === 'YOUR PROFILE' && (
+              <div className="main-profile">
+                <ProfileCard
+                  alien={supreme}
+                  onAbduct={() => {}}
+                  zeroG={zeroG}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
+                  isAbducted={abducted.includes(supreme.id)}
+                  onToggleAbduct={toggleAbduct}
+                  onEdit={(al) => { setEditing(al); setView('CREATE ALIEN') }}
+                />
+              </div>
+            )}
+
+            {view === 'PROFILES' && (
+              <div className="profiles-feed">
+                <div className="grid">
+                  {filtered.length === 0 && <div className="none">No profiles match the current filters.</div>}
+                  {filtered.map((alien) => (
+                    <ProfileCard
+                      key={alien.id}
+                      alien={alien}
+                      onAbduct={onAbduct}
+                      zeroG={zeroG}
+                      favorites={favorites}
+                      onToggleFavorite={toggleFavorite}
+                      isAbducted={abducted.includes(alien.id)}
+                      onToggleAbduct={toggleAbduct}
+                      onEdit={(al) => { setEditing(al); setView('CREATE ALIEN') }}
+                      onDelete={onDelete}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {view === 'REJECTED' && (
               <div className="rejected">
                 <h2>REJECTED</h2>
                 <div className="grid">
-                  {abducted.length===0 && <div className="none">No profiles rejected.</div>}
-                  {abducted.map(id=>{
-                    const a = allAliens.find(x=>x.id===id)
-                    return a? <ProfileCard key={id} alien={a} onAbduct={()=>{}} zeroG={zeroG} isAbducted={true} onToggleAbduct={toggleAbduct} favorites={favorites} onToggleFavorite={toggleFavorite} onEdit={(al)=>{ setEditing(al); setView('CREATE ALIEN') }} onDelete={onDelete} />: null
+                  {abducted.length === 0 && <div className="none">No profiles rejected.</div>}
+                  {abducted.map((id) => {
+                    const a = allAliens.find((x) => x.id === id)
+                    return a ? (
+                      <ProfileCard
+                        key={id}
+                        alien={a}
+                        onAbduct={() => {}}
+                        zeroG={zeroG}
+                        isAbducted={true}
+                        onToggleAbduct={toggleAbduct}
+                        favorites={favorites}
+                        onToggleFavorite={toggleFavorite}
+                        onEdit={(al) => { setEditing(al); setView('CREATE ALIEN') }}
+                        onDelete={onDelete}
+                      />
+                    ) : null
                   })}
                 </div>
               </div>
-          )}
+            )}
 
-          {view==='ACCEPTED' && (
+            {view === 'ACCEPTED' && (
               <div className="accepted">
                 <h2>ACCEPTED</h2>
                 <div className="grid">
-                  {favorites.length===0 && <div className="none">No profiles accepted.</div>}
-                  {favorites.map(id=>{
-                    const a = allAliens.find(x=>x.id===id)
-                    return a? <ProfileCard key={id} alien={a} onAbduct={onAbduct} zeroG={zeroG} favorites={favorites} onToggleFavorite={toggleFavorite} isAbducted={abducted.includes(a.id)} onToggleAbduct={toggleAbduct} onEdit={(al)=>{ setEditing(al); setView('CREATE ALIEN') }} onDelete={onDelete} />: null
+                  {favorites.length === 0 && <div className="none">No profiles accepted.</div>}
+                  {favorites.map((id) => {
+                    const a = allAliens.find((x) => x.id === id)
+                    return a ? (
+                      <ProfileCard
+                        key={id}
+                        alien={a}
+                        onAbduct={onAbduct}
+                        zeroG={zeroG}
+                        favorites={favorites}
+                        onToggleFavorite={toggleFavorite}
+                        isAbducted={abducted.includes(a.id)}
+                        onToggleAbduct={toggleAbduct}
+                        onEdit={(al) => { setEditing(al); setView('CREATE ALIEN') }}
+                        onDelete={onDelete}
+                      />
+                    ) : null
                   })}
                 </div>
               </div>
-          )}
+            )}
 
-          
+            {view === 'COMPATIBILITY' && <Compatibility aliens={allAliens} />}
+            {view === 'TRANSLATOR' && <Translator />}
+            {view === 'EARTH SURVIVAL' && (
+              <div className="survival-panel">
+                <EarthSurvival aliens={allAliens} />
+              </div>
+            )}
+            {view === 'CREATE ALIEN' && (
+              <CreateAlien
+                key={createKey}
+                onCreate={onCreate}
+                initialData={editing}
+                onUpdate={onUpdate}
+                onCancel={() => { setEditing(null); setView('PROFILES') }}
+              />
+            )}
+          </main>
+        </div>
 
-          {view==='COMPATIBILITY' && <Compatibility aliens={allAliens} />}
-          {view==='TRANSLATOR' && <Translator />}
-          {view==='EARTH SURVIVAL' && <div className="survival-panel"><EarthSurvival aliens={allAliens} /></div>}
-          {view==='CREATE ALIEN' && <CreateAlien onCreate={onCreate} initialData={editing} onUpdate={onUpdate} onCancel={()=>{ setEditing(null); setView('PROFILES') }} />}
-        </main>
-      </div>
         {toast && (
           <div className="toast" role="status" aria-live="polite">{toast}</div>
         )}
-    </div>
+      </div>
+    </ErrorBoundary>
   )
 }

@@ -1,14 +1,14 @@
 import React, {useState} from 'react'
 import supabase from '../supabaseClient.js'
 
-const blank = {
+const makeBlank = () => ({
   name:'', species:'', planet:'', age:'', occupation:'', height:'', imageUrl:'',
   appendages:'', atmosphere:'', transportation:'', travelSpeed:'', language:'',
   biography:'', greenFlags:'', redFlags:'', partnerPreferences:''
-}
+})
 
 export default function CreateAlien({ onCreate, initialData, onUpdate, onCancel }){
-  const [form, setForm] = useState(initialData || blank)
+  const [form, setForm] = useState(() => initialData ? { ...initialData } : makeBlank())
   const [loading, setLoading] = useState(false)
   const [step, setStep] = useState(0)
   const [stepError, setStepError] = useState('')
@@ -16,8 +16,8 @@ export default function CreateAlien({ onCreate, initialData, onUpdate, onCancel 
 
   // when editing existing profile, populate form
   React.useEffect(()=>{
-    // Always update form when initialData changes; use blank when null/undefined so the form resets
-    setForm(initialData || blank)
+    if(initialData){ setForm({ ...initialData }) }
+    else { setForm(makeBlank()) }
   },[initialData])
 
   // handle image upload and set data URL
@@ -37,7 +37,7 @@ export default function CreateAlien({ onCreate, initialData, onUpdate, onCancel 
     if(initialData && onUpdate){
       const updated = {...initialData, ...form}
       try{ onUpdate(updated) }catch(e){ console.error('Update callback failed', e) }
-      setForm(blank)
+      setForm(makeBlank())
       setStep(0)
       setLoading(false)
       return
@@ -49,12 +49,12 @@ export default function CreateAlien({ onCreate, initialData, onUpdate, onCancel 
       if(res && res.error){ console.error('Supabase insert error', res.error) }
       const data = (res && res.data && res.data[0]) ? res.data[0] : newAlien
       onCreate(data)
-      setForm(blank)
+      setForm(makeBlank())
       setStep(0)
     }catch(err){
       console.error('Insert failed', err)
       onCreate(newAlien)
-      setForm(blank)
+      setForm(makeBlank())
       setStep(0)
     }finally{ setLoading(false) }
   }
@@ -152,7 +152,7 @@ export default function CreateAlien({ onCreate, initialData, onUpdate, onCancel 
           }}>Next</button>}
         {step===steps.length-1 && (
           <>
-            {initialData && <button type="button" className="btn" onClick={()=>{ setForm(blank); onCancel && onCancel(); }}>Cancel</button>}
+            {initialData && <button type="button" className="btn" onClick={()=>{ setForm(makeBlank()); onCancel && onCancel(); }}>Cancel</button>}
             <button type="submit" disabled={loading || !validateStep(step)} className="btn primary">{loading? (initialData? 'SAVING...':'CREATING...') : (initialData? 'Save Changes' : 'Create Alien')}</button>
           </>
         )}

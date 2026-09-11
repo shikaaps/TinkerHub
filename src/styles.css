@@ -242,6 +242,7 @@ select:focus, input:focus, textarea:focus {
 .zero-g-mode .filters,
 .zero-g-mode .survival-panel,
 .zero-g-mode .compat,
+.zero-g-mode .compatibility-panel,
 .zero-g-mode .accepted,
 .zero-g-mode .rejected,
 .zero-g-mode .main-profile {
@@ -452,6 +453,176 @@ button:active, .btn:active, .step-btn:active { transform: translateY(1px); box-s
 }
 
 /* Compatibility panel styling */
+.compatibility-panel {
+  padding: 20px;
+  border-radius: 14px;
+  background: var(--section-gradient);
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 8px 28px rgba(2,6,23,0.6);
+}
+
+.compatibility-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--neon-pink);
+  text-transform: uppercase;
+}
+
+.compatibility-panel h2 {
+  margin: 0;
+  font-size: clamp(24px, 2vw, 32px);
+  font-family: 'Orbitron', sans-serif;
+}
+
+.compat-pill {
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255,255,255,0.05);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.compat-selection-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.compat-action-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 18px;
+}
+
+.compat-check-btn {
+  min-width: 180px;
+}
+
+.compat-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.compat-field span {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.compat-result {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.compat-score-box {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.compat-score-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.compat-score-number {
+  margin: 10px 0 8px;
+  font-size: clamp(28px, 3vw, 52px);
+  font-family: 'Orbitron', sans-serif;
+  color: var(--neon-green);
+}
+
+.compat-meter {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.compat-meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--neon-pink), var(--soft-purple), var(--neon-green));
+}
+
+.compat-compare-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.compat-profile-card {
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 16px;
+}
+
+.compat-profile-card h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.compat-profile-card p {
+  margin: 0 0 10px;
+  color: var(--muted);
+}
+
+.compat-profile-card ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #dfefff;
+  line-height: 1.8;
+  font-size: 13px;
+}
+
+.compat-reason-box {
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 16px;
+}
+
+.compat-reason-box h4 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--neon-pink);
+}
+
+.compat-reason-box p {
+  margin: 0 0 12px;
+  color: #eaf7ff;
+}
+
+.compat-reason-box ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #dfefff;
+  line-height: 1.8;
+}
+
 .compat {
   padding: 20px;
   border-radius: 14px;
@@ -462,10 +633,8 @@ button:active, .btn:active, .step-btn:active { transform: translateY(1px); box-s
 
 .compat .pick { display:flex; gap:12px; align-items:center; flex-wrap:wrap }
 
-/* Ensure button spacing globally: where buttons are adjacent, add left margin */
 button { margin: 0; }
 button + button { margin-left: 12px; }
 
-/* Extra safety: groups should use gap where possible */
 .navlinks { gap: 12px }
 .actions, .admin-actions, .pick, .step-btn-row { gap: 12px }

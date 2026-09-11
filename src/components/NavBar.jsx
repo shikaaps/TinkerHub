@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function NavBar({ view, setView, zeroG, setZeroG, clearEditing }) {
+export default function NavBar({ view, setView, zeroG, setZeroG, onCreateNew }) {
   return (
     <div className="navbar">
       <div className="nav-left">
@@ -13,7 +13,20 @@ export default function NavBar({ view, setView, zeroG, setZeroG, clearEditing })
       <div className="nav-center">
         <div className="navlinks">
           {['YOUR PROFILE','PROFILES','REJECTED','ACCEPTED','COMPATIBILITY','TRANSLATOR','EARTH SURVIVAL','CREATE ALIEN'].map(v=> (
-            <button key={v} className={view===v? 'active':''} onClick={()=>{ if(v==='CREATE ALIEN' && typeof clearEditing === 'function'){ clearEditing() }; setView(v) }}>{v}</button>
+            <button
+              key={v}
+              className={view===v? 'active':''}
+              onClick={() => {
+                if(v === 'CREATE ALIEN') {
+                  if(onCreateNew) onCreateNew()
+                  else setView(v)
+                  return
+                }
+                setView(v)
+              }}
+            >
+              {v}
+            </button>
           ))}
         </div>
       </div>
