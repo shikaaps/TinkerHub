@@ -1,7 +1,16 @@
 import React from 'react'
 
 export default function Filters({ filters, setFilters, reset, speciesOptions, appendOptions, atmosphereOptions, dietOptions, transportOptions }){
-  function update(k,v){ setFilters(prev=>({...prev,[k]:v})) }
+  function update(k,v){
+    // Auto-reset all other filters when one is changed
+    setFilters(prev=>{
+      const keys = Object.keys(prev || {})
+      const next = {}
+      keys.forEach(kk=> next[kk]='')
+      next[k] = v
+      return next
+    })
+  }
   return (
     <div className="filters">
       <select value={filters.species} onChange={e=>update('species', e.target.value)}>

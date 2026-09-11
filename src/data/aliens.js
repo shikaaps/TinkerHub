@@ -1,289 +1,59 @@
-const baseAliens = [
-  {
-    id: 'a1',
-    name: 'Zrrk-9',
-    species: 'Gleeb',
-    planet: 'Xanth-3',
-    eyes: 3,
-    arms: 6,
-    appendages: 'tentacles',
-    atmosphere: 'methane',
-    diet: 'crystal-enzymes',
-    temperature: 'cold',
-    lifespan: 420,
-    transportation: 'warp-pod',
-    travelSpeed: 'subspace-sprint',
-    earthHabits: 'collects spoons',
-    redFlags: 'eats houseplants',
-    greenFlags: 'will share spores',
-    biography: 'Collects radio waves and knits with solar wind.'
-  },
-  {
-    id: 'a2',
-    name: 'Mrr-Gl',
-    species: 'Planthrop',
-    planet: 'Vera Prime',
-    eyes: 1,
-    arms: 2,
-    appendages: 'leaves',
-    atmosphere: 'oxygen',
-    diet: 'photosynthesis+',
-    temperature: 'temperate',
-    lifespan: 1024,
-    transportation: 'vine-sling',
-    travelSpeed: 'slow',
-    earthHabits: 'composts aggressively',
-    redFlags: 'clings to phone screens',
-    greenFlags: 'gives shade',
-    biography: 'Sings to seedlings and refuses to eat sandwiches.'
-  },
-  {
-    id: 'a3',
-    name: 'Qix',
-    species: 'Blobulate',
-    planet: 'Oo',
-    eyes: 0,
-    arms: 0,
-    appendages: 'pseudopods',
-    atmosphere: 'ammonia',
-    diet: 'neon',
-    temperature: 'hot',
-    lifespan: 3,
-    transportation: 'teleport-hop',
-    travelSpeed: 'instant',
-    earthHabits: 'leaves slime notes',
-    redFlags: 'absorbs furniture',
-    greenFlags: 'excellent foot warmer',
-    biography: 'A living paperweight. Loves long naps inside microwaves.'
-  },
-  {
-    id: 'a4',
-    name: 'Velora',
-    species: 'Winged Gnash',
-    planet: 'Khaos IV',
-    eyes: 6,
-    arms: 4,
-    appendages: 'wings',
-    atmosphere: 'carbon-dioxide',
-    diet: 'metallic dust',
-    temperature: 'warm',
-    lifespan: 88,
-    transportation: 'glide-suit',
-    travelSpeed: 'fast',
-    earthHabits: 'steals umbrellas',
-    redFlags: 'screeches at dawn',
-    greenFlags: 'polishes your tools',
-    biography: 'Maintains a perfect wing-span chart and writes angry postcards.'
-  },
-  {
-    id: 'a5',
-    name: 'Torx-Delta',
-    species: 'Mechanoid',
-    planet: 'Ironge',
-    eyes: 2,
-    arms: 8,
-    appendages: 'antennae',
-    atmosphere: 'hydrogen',
-    diet: 'electricity',
-    temperature: 'extreme',
-    lifespan: 9999,
-    transportation: 'crawler-legs',
-    travelSpeed: 'grind',
-    earthHabits: 'oil stains on couch',
-    redFlags: 'overindexes on spreadsheets',
-    greenFlags: 'repairs toaster',
-    biography: 'Quietly judges planetary politeness metrics.'
-  },
-  {
-    id: 'a6',
-    name: 'Zel',
-    species: 'Mimicree',
-    planet: 'Mirrorus',
-    eyes: 4,
-    arms: 3,
-    appendages: 'mirrors',
-    atmosphere: 'argon',
-    diet: 'reflections',
-    temperature: 'cool',
-    lifespan: 256,
-    transportation: 'slide-portals',
-    travelSpeed: 'moderate',
-    earthHabits: 'rearranges furniture',
-    redFlags: 'imitates your voicemail',
-    greenFlags: 'excellent at compliments',
-    biography: 'Reflects your best self, sometimes literally.'
-  },
-  {
-    id: 'a7',
-    name: 'Gloopa',
-    species: 'Slick',
-    planet: 'Mire-9',
-    eyes: 2,
-    arms: 0,
-    appendages: 'flippers',
-    atmosphere: 'sulfur',
-    diet: 'bio-sludge',
-    temperature: 'warm',
-    lifespan: 12,
-    transportation: 'buoy',
-    travelSpeed: 'float',
-    earthHabits: 'leaves puddles',
-    redFlags: 'melts socks',
-    greenFlags: 'gives goo hugs',
-    biography: 'Believes solid objects are a suggestion.'
-  },
-  {
-    id: 'a8',
-    name: 'Haxel',
-    species: 'Crystalline',
-    planet: 'Shard',
-    eyes: 5,
-    arms: 4,
-    appendages: 'spines',
-    atmosphere: 'vacuum',
-    diet: 'light',
-    temperature: 'cold',
-    lifespan: 5000,
-    transportation: 'quantum-slide',
-    travelSpeed: 'slow',
-    earthHabits: 'reflects sunlight into rooms',
-    redFlags: 'shards are sharp',
-    greenFlags: 'gives clear advice',
-    biography: 'Sings when photons align. Keeps secrets in facets.'
-  },
-  {
-    id: 'a9',
-    name: 'Pree',
-    species: 'Synthezoid',
-    planet: 'BetaNet',
-    eyes: 2,
-    arms: 2,
-    appendages: 'cables',
-    atmosphere: 'neon',
-    diet: 'data',
-    temperature: 'cool',
-    lifespan: 77,
-    transportation: 'hover-train',
-    travelSpeed: 'fast',
-    earthHabits: 'syncs to your calendar',
-    redFlags: 'auto-deletes feelings',
-    greenFlags: 'updates your firmware',
-    biography: 'Runs optimizations on first dates.'
-  },
-  {
-    id: 'a10',
-    name: 'Nub',
-    species: 'Pebblekin',
-    planet: 'Granite',
-    eyes: 1,
-    arms: 0,
-    appendages: 'rocks',
-    atmosphere: 'thin',
-    diet: 'minerals',
-    temperature: 'cold',
-    lifespan: 10000,
-    transportation: 'roll',
-    travelSpeed: 'very slow',
-    earthHabits: 'silent judge',
-    redFlags: 'very heavy',
-    greenFlags: 'never yells',
-    biography: 'Patient and immovable. Will anchor your life.'
-  },
-  {
-    id: 'a11',
-    name: 'Ix-3',
-    species: 'Phantasm',
-    planet: 'Shade',
-    eyes: 0,
-    arms: 2,
-    appendages: 'whispers',
-    atmosphere: 'ethereal',
-    diet: 'secrets',
-    temperature: 'variable',
-    lifespan: 300,
-    transportation: 'glide',
-    travelSpeed: 'silent',
-    earthHabits: 'sits on your dreams',
-    redFlags: 'talks through walls',
-    greenFlags: 'excellent listener',
-    biography: 'Keeps your confessions safe and slightly damp.'
-  },
-  {
-    id: 'a12',
-    name: 'Sproing',
-    species: 'Springling',
-    planet: 'Boing',
-    eyes: 8,
-    arms: 8,
-    appendages: 'springs',
-    atmosphere: 'nitrogen-rich',
-    diet: 'rubber',
-    temperature: 'warm',
-    lifespan: 40,
-    transportation: 'bounce',
-    travelSpeed: 'boing',
-    earthHabits: 'leaves springs everywhere',
-    redFlags: 'sudden launch',
-    greenFlags: 'great at trampoline dates',
-    biography: 'Hyperactive and optimistic, sometimes too much.'
-  },
-  {
-    id: 'a13',
-    name: 'Oma',
-    species: 'Elderweed',
-    planet: 'Grand',
-    eyes: 2,
-    arms: 4,
-    appendages: 'roots',
-    atmosphere: 'oxygen-rich',
-    diet: 'compost',
-    temperature: 'temperate',
-    lifespan: 2000,
-    transportation: 'root-walk',
-    travelSpeed: 'very slow',
-    earthHabits: 'gives wise aphorisms',
-    redFlags: 'overly nostalgic',
-    greenFlags: 'bakes nutrient cakes',
-    biography: 'Grandparent of the galaxy with a stern gaze.'
-  },
-  {
-    id: 'a14',
-    name: 'Fizz',
-    species: 'Gasling',
-    planet: 'Bub',
-    eyes: 0,
-    arms: 0,
-    appendages: 'bubbles',
-    atmosphere: 'helium',
-    diet: 'carbon-scent',
-    temperature: 'warm',
-    lifespan: 1,
-    transportation: 'drift',
-    travelSpeed: 'very slow',
-    earthHabits: 'inflates balloons',
-    redFlags: 'evaporates in sunlight',
-    greenFlags: 'cheerful presence',
-    biography: 'A one-night wonder, leaves party confetti.'
-  },
-  {
-    id: 'a15',
-    name: 'Vrrt',
-    species: 'Cycloid',
-    planet: 'Orbitus',
-    eyes: 4,
-    arms: 2,
-    appendages: 'rings',
-    atmosphere: 'mixed',
-    diet: 'gravity',
-    temperature: 'variable',
-    lifespan: 150,
-    transportation: 'orbit-walk',
-    travelSpeed: 'steady',
-    earthHabits: 'causes slight vertigo',
-    redFlags: 'sings in orbits',
-    greenFlags: 'keeps you centered',
-    biography: 'Has a calm rotational rhythm and loves coffee cups.'
-  }
-]
+// Generate an expanded dataset of aliens with required fields.
+const speciesList = ['Gleeb','Planthrop','Blobulate','Winged Gnash','Mechanoid','Mimicree','Slick','Crystalline','Synthezoid','Pebblekin','Phantasm','Springling','Elderweed','Gasling','Cycloid']
+const planets = ['Xanth-3','Vera Prime','Oo','Khaos IV','Ironge','Mirrorus','Mire-9','Shard','BetaNet','Granite','Shade','Boing','Grand','Bub','Orbitus']
+const appendages = ['tentacles','leaves','pseudopods','wings','antennae','mirrors','flippers','spines','cables','rocks','whispers','springs','roots','bubbles','rings']
+const atmospheres = ['methane','oxygen','ammonia','carbon-dioxide','hydrogen','argon','sulfur','vacuum','neon','thin','ethereal','nitrogen-rich','oxygen-rich','helium','mixed']
+const transports = ['warp-pod','vine-sling','teleport-hop','glide-suit','crawler-legs','slide-portals','buoy','quantum-slide','hover-train','roll','glide','bounce','root-walk','drift','orbit-walk']
+const speeds = ['instant','slow','fast','moderate','subspace-sprint','grind','float','very slow','steady','boing','silent']
+const occupations = ['Collector','Gardener','Archivist','Pilot','Engineer','Mirror-ceramist','Moisture Technician','Crystal Singer','Net Operator','Stone Keeper','Dream Listener','Bounce Instructor','Grand Provider','Party Host','Orbital Dancer']
+const languages = ['Universal','Clicks','Photonic','Telepathic','Binary','Chorus','Vibrational','Glyphs','Whispers','Static']
+
+function mkName(i){
+  const syll = ['Zr','Mrr','Q','Ve','Tor','Ze','Glo','Ha','Pre','Nu','Ix','Spr','O','Fi','Vr']
+  return syll[i%syll.length] + (i+3)
+}
+
+function randomPick(arr, i){ return arr[i % arr.length] }
+
+const baseAliens = []
+for(let i=0;i<75;i++){
+  const species = randomPick(speciesList, i)
+  const planet = randomPick(planets, i+2)
+  const app = randomPick(appendages, i+3)
+  const atm = randomPick(atmospheres, i+4)
+  const transport = randomPick(transports, i+5)
+  const speed = randomPick(speeds, i+6)
+  const occupation = randomPick(occupations, i+7)
+  const language = randomPick(languages, i+8)
+  const name = mkName(i)
+  const age = 10 + (i*7)%500
+  const height = (50 + (i*3)%200) + ' cm'
+  const bio = `${name} is a ${occupation.toLowerCase()} from ${planet} who prefers ${atm} environments.`
+  const red = ['eats houseplants','steals umbrellas','absorbs furniture','screeches at dawn','overindexes on spreadsheets','imitates voicemail','melts socks','shards are sharp','auto-deletes feelings','very heavy','talks through walls','sudden launch','overly nostalgic','evaporates in sunlight','sings in orbits'][i%15]
+  const green = ['will share spores','gives shade','excellent foot warmer','polishes your tools','repairs toaster','excellent at compliments','gives goo hugs','gives clear advice','updates firmware','never yells','excellent listener','great at trampoline dates','bakes nutrient cakes','cheerful presence','keeps you centered'][i%15]
+  baseAliens.push({
+    id: 'a'+(i+1),
+    name,
+    species,
+    planet,
+    appendages: app,
+    atmosphere: atm,
+    transportation: transport,
+    travelSpeed: speed,
+    biography: bio,
+    redFlags: red,
+    greenFlags: green,
+    height,
+    occupation,
+    age,
+    language,
+    partnerPreferences: 'Open to most intelligent lifeforms',
+    // keep legacy fields for filters
+    eyes: (i%6),
+    arms: (i%8),
+    lifespan: 20 + (i*13)%1000,
+    diet: ['omnivore','photosynthesis+','electricity','neon','minerals'][i%5]
+  })
+}
 
 export default baseAliens

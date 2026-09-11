@@ -1,24 +1,31 @@
 import React from 'react'
 
-export default function NavBar({ view, setView, zeroG, setZeroG }) {
+export default function NavBar({ view, setView, zeroG, setZeroG, clearEditing }) {
   return (
     <div className="navbar">
-      <div className="title">
-        <div className="main">ALIEN MATRIMONY</div>
-        <div className="sub">Find love beyond the known universe. Medical clearance not included.</div>
+      <div className="nav-left">
+        <div className="title">
+          <div className="main">Alien Matrimony</div>
+          <div className="sub">finding intergalactic love since absolutely nobody asked us to</div>
+        </div>
       </div>
-      <div className="navlinks">
-        {['PROFILES','ABDUCTED','COMPATIBILITY','TRANSLATOR','EARTH SURVIVAL','CREATE ALIEN'].map(v=> (
-          <button key={v} className={view===v? 'active':''} onClick={()=>setView(v)}>{v}</button>
-        ))}
+
+      <div className="nav-center">
+        <div className="navlinks">
+          {['YOUR PROFILE','PROFILES','REJECTED','ACCEPTED','COMPATIBILITY','TRANSLATOR','EARTH SURVIVAL','CREATE ALIEN'].map(v=> (
+            <button key={v} className={view===v? 'active':''} onClick={()=>{ if(v==='CREATE ALIEN' && typeof clearEditing === 'function'){ clearEditing() }; setView(v) }}>{v}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="nav-right">
         <label className="zerog">
-          ZERO-G
-          <input type="checkbox" checked={zeroG} onChange={e=>setZeroG(e.target.checked)} />
+          <div className="switch">
+            <input type="checkbox" checked={zeroG} onChange={e=>setZeroG(e.target.checked)} />
+            <span className="knob"></span>
+          </div>
+          <div className="label">ZERO-G</div>
         </label>
-      </div>
-      <div className="status">
-        <div>INTERGALACTIC MATRIMONY NETWORK: <span className="online">ONLINE</span></div>
-        <div>EARTH COMPATIBILITY: <span className="questionable">QUESTIONABLE</span></div>
       </div>
     </div>
   )
