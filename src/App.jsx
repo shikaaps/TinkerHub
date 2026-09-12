@@ -9,6 +9,7 @@ import CreateAlien from './components/CreateAlien'
 import Compatibility from './components/Compatibility'
 import Translator from './components/Translator'
 import EarthSurvival from './components/EarthSurvival'
+import gromvorImg from "./assets/Grom-Vor-09.png";
 
 function useLocalStorage(key, initial){
   const [state, setState] = useState(()=>{
@@ -45,8 +46,30 @@ export default function App(){
 
   const [editing, setEditing] = useState(null)
   const [createKey, setCreateKey] = useState(0)
-  const defaultSupreme = { id:'supreme', name:'Supreme Leader', species:'Omniarch', planet:'Sol Nexus', age: '??', occupation:'Ruler of Everything', height:'variable', imageUrl:'', appendages:'none', atmosphere:'oxygen', transportation:'teleport', travelSpeed:'instant', language:'All Tongues', biography:'I administer cosmic bureaucracy and occasional benevolent chaos.', greenFlags:'Generous tax forgiveness', redFlags:'Extremely opinionated', partnerPreferences:'Must be loyal', eyes:2, lifespan:10000, diet:'stars' }
-  const [supreme, setSupreme] = useLocalStorage('am_supreme', defaultSupreme)
+  const defaultSupreme = { 
+    id: 'supreme', 
+    name: 'Grom-Vor-09', 
+    species: 'Carcharoth', 
+    planet: 'Thalassa-Prime', 
+    age: 64, 
+    occupation: 'Warlord', 
+    height: '8ft 4in', 
+    imageUrl: gromvorImg, 
+    avatar: gromvorImg, 
+    appendages: 'Fin & Tail', 
+    atmosphere: 'Sulfuric Methane', 
+    transportation: 'Heavy Dreadnought', 
+    travelSpeed: 'Sub-light', 
+    language: 'High Karkan', 
+    biography: 'Battle-hardened warlord seeking a companion who respects honor, heavy armor, and massive war axes.', 
+    greenFlags: 'Protective, extremely loyal, respects strength', 
+    redFlags: 'Smashes furniture during intense discussions', 
+    partnerPreferences: 'Must survive combat training', 
+    eyes: 'Yellow', 
+    lifespan: 200, 
+    diet: 'Carnivorous' 
+  }
+const [supreme, setSupreme] = useLocalStorage('am_supreme_v2', defaultSupreme)
 
   // On initial load, fetch aliens stored via supabase shim and merge into created list
   useEffect(()=>{
